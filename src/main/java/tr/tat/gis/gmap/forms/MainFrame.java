@@ -5,6 +5,20 @@
  */
 package tr.tat.gis.gmap.forms;
 
+import java.awt.RenderingHints;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.map.MapContent;
+import org.geotools.referencing.CRS;
+import org.geotools.renderer.GTRenderer;
+import org.geotools.renderer.lite.StreamingRenderer;
+import org.geotools.tile.util.TileLayer;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import tr.tat.gis.gmap.google.GoogleService;
+
 /**
  *
  * @author otat
@@ -16,6 +30,20 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
+       initMap();
+    }
+    
+    private void initMap(){
+        try {
+            MapContent mapContent=new MapContent(CRS.decode("EPSG:3857",true));
+            ReferencedEnvelope ref=new ReferencedEnvelope(3072396.120328562,5239415.39800297,3176673.821231725,5240053.448136033, mapContent.getCoordinateReferenceSystem());
+            mapContent.getViewport().setBounds(ref);
+            this.jMapPane1.setMapContent(mapContent);
+           
+            
+        } catch (FactoryException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -27,21 +55,41 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jMapPane1 = new org.geotools.swing.JMapPane();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jMapPane1Layout = new javax.swing.GroupLayout(jMapPane1);
+        jMapPane1.setLayout(jMapPane1Layout);
+        jMapPane1Layout.setHorizontalGroup(
+            jMapPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 587, Short.MAX_VALUE)
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        jMapPane1Layout.setVerticalGroup(
+            jMapPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 471, Short.MAX_VALUE)
         );
+
+        getContentPane().add(jMapPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        System.out.println("shown1");
+        String gMapStandartURL = "https://mt2.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga";
+        GoogleService service = new GoogleService("gMapStandart", gMapStandartURL);
+        TileLayer gTileLayer = new TileLayer(service);
+        this.jMapPane1.getMapContent().addLayer(gTileLayer);
+        System.out.println("shown");
+
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -79,5 +127,6 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private org.geotools.swing.JMapPane jMapPane1;
     // End of variables declaration//GEN-END:variables
 }
