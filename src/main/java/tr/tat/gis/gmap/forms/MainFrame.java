@@ -55,14 +55,61 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnGroupGMap = new javax.swing.ButtonGroup();
+        jToolBar1 = new javax.swing.JToolBar();
+        radioStandartNoMap = new javax.swing.JRadioButton();
+        radioStandartGMap = new javax.swing.JRadioButton();
+        radioHypridGMap = new javax.swing.JRadioButton();
         jMapPane1 = new org.geotools.swing.JMapPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Geotools with Google Map");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
         });
+
+        jToolBar1.setRollover(true);
+
+        btnGroupGMap.add(radioStandartNoMap);
+        radioStandartNoMap.setSelected(true);
+        radioStandartNoMap.setText("No Map");
+        radioStandartNoMap.setFocusable(false);
+        radioStandartNoMap.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        radioStandartNoMap.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        radioStandartNoMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mapChangeAction(evt);
+            }
+        });
+        jToolBar1.add(radioStandartNoMap);
+
+        btnGroupGMap.add(radioStandartGMap);
+        radioStandartGMap.setText("GMap Standart");
+        radioStandartGMap.setFocusable(false);
+        radioStandartGMap.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        radioStandartGMap.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        radioStandartGMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mapChangeAction(evt);
+            }
+        });
+        jToolBar1.add(radioStandartGMap);
+
+        btnGroupGMap.add(radioHypridGMap);
+        radioHypridGMap.setText("GMap Hyprid");
+        radioHypridGMap.setFocusable(false);
+        radioHypridGMap.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        radioHypridGMap.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        radioHypridGMap.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mapChangeAction(evt);
+            }
+        });
+        jToolBar1.add(radioHypridGMap);
+
+        getContentPane().add(jToolBar1, java.awt.BorderLayout.PAGE_START);
 
         javax.swing.GroupLayout jMapPane1Layout = new javax.swing.GroupLayout(jMapPane1);
         jMapPane1.setLayout(jMapPane1Layout);
@@ -72,7 +119,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         jMapPane1Layout.setVerticalGroup(
             jMapPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 471, Short.MAX_VALUE)
+            .addGap(0, 430, Short.MAX_VALUE)
         );
 
         getContentPane().add(jMapPane1, java.awt.BorderLayout.CENTER);
@@ -83,13 +130,27 @@ public class MainFrame extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         System.out.println("shown1");
-        String gMapStandartURL = "https://mt2.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga";
-        GoogleService service = new GoogleService("gMapStandart", gMapStandartURL);
-        TileLayer gTileLayer = new TileLayer(service);
-        this.jMapPane1.getMapContent().addLayer(gTileLayer);
         System.out.println("shown");
 
     }//GEN-LAST:event_formWindowOpened
+
+    private void mapChangeAction(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mapChangeAction
+        if (this.jMapPane1.getMapContent().layers().size() > 0) {
+            this.jMapPane1.getMapContent().layers().remove(0);
+        }
+        if (evt.getSource().equals(this.radioStandartGMap)) {
+            String gMapStandartURL = "https://mt2.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}&s=Ga";
+            GoogleService service = new GoogleService("gMapStandart", gMapStandartURL);
+            TileLayer gTileLayer = new TileLayer(service);
+            this.jMapPane1.getMapContent().addLayer(gTileLayer);
+
+        }else if(evt.getSource().equals(this.radioHypridGMap)){
+            String gMapHyridURL = "https://mt2.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}&s=Ga";
+            GoogleService service = new GoogleService("gMapStandart", gMapHyridURL);
+            TileLayer gTileLayer = new TileLayer(service);
+            this.jMapPane1.getMapContent().addLayer(gTileLayer);
+        }
+    }//GEN-LAST:event_mapChangeAction
 
     /**
      * @param args the command line arguments
@@ -127,6 +188,11 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup btnGroupGMap;
     private org.geotools.swing.JMapPane jMapPane1;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JRadioButton radioHypridGMap;
+    private javax.swing.JRadioButton radioStandartGMap;
+    private javax.swing.JRadioButton radioStandartNoMap;
     // End of variables declaration//GEN-END:variables
 }
